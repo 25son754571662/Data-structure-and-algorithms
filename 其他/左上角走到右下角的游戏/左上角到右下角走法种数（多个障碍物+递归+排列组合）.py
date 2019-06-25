@@ -14,20 +14,15 @@ def myfun(m,x,y):#直接把起点和终点交换吧，都一样，还少些变�
 '''
 
 '''有效走法=所有走法-不可行走法（也是递归）'''
-def myfun(m,x,y,x0,y0):
-    all_ways,invalid_ways,bosses=C(x-x0,x+y-x0-y0),0,[]#不考虑boss的所有走法，有C(x，x+y种)
-    #从右往左，从下往上扫描，找候选boss
-    for i in range(x-x0+1):
-        p=x-i
+def myfun(m,x,y,x0,y0):#所有走法，有C(x-x0，x+y-x0-y0)种
+    f=lambda n:1 if n==0 else n*f(n-1)
+    C=lambda m,n:f(n)//(f(m)*f(n-m))
+    all_ways,invalid_ways=C(x-x0,x+y-x0-y0),0
+    for i in range(x-x0+1):#从右往左，从下往上扫描，找候选boss
         for j in range(y-y0+1):
-            q=j+y0
-            if p==x0 and q==y0:continue
-            if p==x and q==x:continue
+            p,q=x-i,j+y0
+            if (p==x0 and q==y0)or (p==x and q==x):continue
             if m[p][q]==1:invalid_ways+=myfun(m,x,y,p,q)*C(p-x0,p+q-x0-y0)
     return all_ways-invalid_ways
-    
-def C(m,n):
-    f=lambda n:1 if n==0 else n*f(n-1)
-    return f(n)//(f(m)*f(n-m))
 
 print(myfun(m,x,y,0,0))

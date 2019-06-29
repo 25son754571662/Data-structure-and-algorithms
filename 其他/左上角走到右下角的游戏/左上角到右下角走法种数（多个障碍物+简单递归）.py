@@ -2,7 +2,7 @@ from numpy.random import rand
 
 m,n=4,5
 
-arr=[[0 for x in range(n)] for y in range(m)]
+arr=[[0 for y in range(n)] for x in range(m)]
 
 for i in range(m):
     for j in range(n):
@@ -11,12 +11,12 @@ for i in range(m):
         if rand()<0.2: arr[i][j]=1
 
 #x、y为起点，m、n为arr大小
-def all_valid_ways(arr,x,y,m,n):
-    if arr[x][y]==1:return 0#如果是障碍物块
-    if x==m-1 and y==n-1:return 1#到终点算1种方法
-    if x==m-1:return all_valid_ways(arr,x,y+1,m,n)#行走到底了
-    if y==n-1:return all_valid_ways(arr,x+1,y,m,n)#列走到底了
-    return all_valid_ways(arr,x+1,y,m,n)+all_valid_ways(arr,x,y+1,m,n)
+def all_valid_ways(arr,x,y):#直接把起点和终点交换都一样，还少些变量
+    if arr[x][y]==1:return 0#障碍物位置算0种方案
+    if x==0 and y==0:return 1#终点算1种方案
+    if x==0 and not y==0:return all_valid_ways(arr,x,y-1)
+    if y==0 and not x==0:return all_valid_ways(arr,x-1,y)
+    return all_valid_ways(arr,x-1,y)+all_valid_ways(arr,x,y-1)
     
 [print(arr[t]) for t in range(m)]    
-print(all_valid_ways(arr,0,0,m,n))
+print(all_valid_ways(arr,m-1,n-1))
